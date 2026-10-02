@@ -9,6 +9,7 @@ import { AuthModule } from './auth/auth.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { TemasModule } from './temas/temas.module';
 import { AgentModule } from './agent/agent.module';
+import { RoleModule } from './role/role.module';
 
 export const { ObserveModule, ObserveInstrument } = createObserveModule();
 
@@ -26,6 +27,7 @@ export const { ObserveModule, ObserveInstrument } = createObserveModule();
     AuthModule,
     TemasModule,
     AgentModule,
+    RoleModule,
   ],
   controllers: [AppController],
   providers: [AppService],

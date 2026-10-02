@@ -1,26 +1,26 @@
 import { Injectable } from '@nestjs/common';
-import { CreateTemaDto } from './dto/create-tema.dto';
-import { UpdateTemaDto } from './dto/update-tema.dto';
+import { InjectModel } from '@nestjs/mongoose';
+import { Tema, TemaDocument } from './schema/tema.schema';
+import { Model, Types } from 'mongoose';
+import { Historial } from '../historial/schema/historial.schema';
 
 @Injectable()
 export class TemasService {
-  create(createTemaDto: CreateTemaDto) {
-    return 'This action adds a new tema';
+
+  constructor(@InjectModel(Tema.name) private temaModel: Model<TemaDocument>,
+              @InjectModel(Historial.name) private historialModel: Model<Historial>) {}
+
+  async findAllByUser(userId: string) {
+
+    return this.temaModel.find({
+      userId: new Types.ObjectId(userId),
+    }).sort({ dateCreated: -1 }).exec();
   }
 
-  findAll() {
-    return `This action returns all temas`;
-  }
+  async remove(id: string) {
 
-  findOne(id: number) {
-    return `This action returns a #${id} tema`;
-  }
+    await this.historialModel.deleteMany({ temId: new Types.ObjectId(id) }).exec();
 
-  update(id: number, updateTemaDto: UpdateTemaDto) {
-    return `This action updates a #${id} tema`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} tema`;
+    return this.temaModel.findByIdAndDelete(id).exec();
   }
 }

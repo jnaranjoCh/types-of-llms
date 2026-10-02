@@ -1,6 +1,5 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import mongoose, { HydratedDocument } from "mongoose";
-import { Tema } from "../../temas/schema/tema.schema";
+import { HydratedDocument, Types } from "mongoose";
 
 export type HistorialDocument = HydratedDocument<Historial>;
 
@@ -10,11 +9,14 @@ export class Historial {
     @Prop({ default: '' })
     text: string;
 
-    @Prop({ required: true, type: mongoose.Schema.Types.ObjectId, ref: 'Tema' })
-    temId: Tema;
+    @Prop({ required: true, type: Types.ObjectId, ref: 'Tema' })
+    idTema: Types.ObjectId;
 
     @Prop({ required: true, type: Date, default: Date.now })
     dateCreated: Date;
+
+    @Prop({ required: true })
+    isJudge: boolean;
 }
 
 export const HistorialSchema = SchemaFactory.createForClass(Historial);
